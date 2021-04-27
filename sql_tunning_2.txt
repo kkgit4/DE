@@ -1,0 +1,18 @@
+2. List the names of students with id in the range of v2 (id) to v3 (inclusive).
+
+When Analyzed the query time, entire table is scanning (all 400 rows), and cost is also high.
+
+Observed no index found on this table, Added Index on id. Now cost is low and read one record because table sorted
+
+Before
+--------
+-> Filter: (student.id between <cache>((@v2)) and <cache>((@v3)))  (cost=41.00 rows=278) (actual time=0.019..0.296 rows=278 loops=1)
+     -> Table scan on Student  (cost=41.00 rows=400) (actual time=0.016..0.250 rows=400 loops=1)
+ 
+
+After
+-------
+-> Filter: ((student.id >= <cache>((@v2))) and (student.id <= <cache>((@v3))))  (cost=41.00 rows=278) (actual time=0.016..0.318 rows=278 loops=1)
+     -> Table scan on Student  (cost=41.00 rows=400) (actual time=0.015..0.251 rows=400 loops=1)
+ 
+ 

@@ -1,0 +1,29 @@
+5. List the names of students who have taken a course from department v6 (deptId), but not v7.
+
+No need to mention v7 details while fetching only records for v6. And rewrite the query with CTE
+
+
+
+
+Solution
+--------
+WITH tra_course AS 
+(SELECT studId FROM Transcript
+INNER JOIN Course 
+ON deptId = @v6 AND Course.crsCode = Transcript.crsCode)
+
+SELECT * FROM student s
+INNER JOIN tra_course t 
+ON s.id = t.studid
+
+
+
+
+
+Below query giving 26 rows instead 30
+------------------------------------
+SELECT * FROM student 
+WHERE id IN 
+(SELECT studId FROM Transcript
+INNER JOIN Course 
+ON deptId = @v6 AND Course.crsCode = Transcript.crsCode)

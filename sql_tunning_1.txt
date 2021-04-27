@@ -1,0 +1,14 @@
+1. List the name of the student with id equal to v1 (id).
+
+When Analyzed the query time, entire table is scanning (all 400 rows), and cost is also high.
+
+Observed no index found on this table, Added Index on id. Now cost is low and read one record because table sorted
+
+Before
+--------
+'-> Filter: (student.id = <cache>((@v1)))  (cost=41.00 rows=40) (actual time=0.072..0.236 rows=1 loops=1)\n    -> Table scan on Student  (cost=41.00 rows=400) (actual time=0.025..0.204 rows=400 loops=1)\n'
+
+After
+-------
+-> Index lookup on Student using idx_student_id (id=(@v1))  (cost=0.35 rows=1) (actual time=474.307..474.313 rows=1 loops=1)
+ 
